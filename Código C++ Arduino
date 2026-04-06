@@ -1,0 +1,66 @@
+
+
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+// Inicialização do LCD: endereço 0x27 ou 0x3F, 16 colunas e 2 linhas
+LiquidCrystal_I2C lcd(32, 16, 2);
+
+// Definição dos pinos analógicos
+const int pinTemp = A0;
+const int pinLuz = A1;
+const int pinUmidade = A2;
+
+void setup() {
+  // Inicialização da comunicação Serial (Baud rate de 9600 para integração Java)
+  Serial.begin(9600);
+
+  // Inicialização do LCD
+  lcd.init();
+  lcd.backlight();
+  
+  lcd.setCursor(0, 1);
+  lcd.print("Inicializando...");
+  delay(2000);
+}
+
+void loop() {
+  // 1. Processamento da Temperatura (Sensor TMP36)
+  int leituraTemp = analogRead(pinTemp);
+  float tensao = leituraTemp * (5.0 / 1023.0);
+  float temperaturaC = (tensao - 0.5) * 100.0;
+
+  // 2. Processamento da Iluminação (LDR)
+  int leituraLuz = analogRead(pinLuz);
+
+  // 3. Processamento da Umidade
+  int leituraUmidade = analogRead(pinUmidade);
+  // Mapeia o valor analógico (0-1023) para porcentagem (0-100%)
+  int porcentagemUmidade = map(leituraUmidade, 0, 1023, 0, 100);
+
+  // --- Atualização do Display LCD ---
+  lcd.clear();
+  
+  // Linha 1: Temperatura e Luz
+  lcd.setCursor(0, 0);
+  lcd.print("T:");
+  lcd.print(temperaturaC, 1);
+  lcd.print("C L:");
+  lcd.print(leituraLuz);
+
+  // Linha 2: Umidade
+  lcd.setCursor(0, 1);
+  lcd.print("Umidade: ");
+  lcd.print(porcentagemUmidade);
+  lcd.print("%");
+
+  // --- Envio de dados via Serial para o Módulo Java ---
+  // Formato: Temperatura;Luz;Umidade
+  Serial.print(temperaturaC);
+  Serial.print(";");
+  Serial.print(leituraLuz);
+  Serial.print(";");
+  Serial.println(porcentagemUmidade);
+
+  delay(5000); // Intervalo de 5 segundos entre leituras
+}

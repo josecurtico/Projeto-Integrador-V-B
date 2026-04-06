@@ -1,9 +1,13 @@
 Projeto Integrador V-B
 Curso: Tecnologia em Análise e Desenvolvimento de Sistemas
+
 Discente: José Humberto Curtiço Júnior
+
 Professor Esp. Thalles Bruno Gonçalves Nery dos Santos
+
 Relatório Técnico: Sistema Integrado de Monitoramento Residencial
 Inteligente
+
 Este projeto apresenta a concepção e prototipação de um sistema “Smart
 Home” focado no monitoramento do ambiente de uma residência. O objetivo é
 coletar, processar e exibir dados em tempo real (temperatura, umidade e
